@@ -1,4 +1,4 @@
-package com.yurab.photoapiclient.model.Response;
+package com.yurab.photoapiclient.model.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

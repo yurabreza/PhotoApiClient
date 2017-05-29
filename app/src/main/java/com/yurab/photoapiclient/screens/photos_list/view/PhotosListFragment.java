@@ -7,13 +7,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.yurab.photoapiclient.R;
-import com.yurab.photoapiclient.model.Response.Photo;
+import com.yurab.photoapiclient.model.response.Photo;
 import com.yurab.photoapiclient.screens.photos_list.adapter.PhotosAdapter;
 import com.yurab.photoapiclient.screens.photos_list.presenter.PhotosListPresenter;
 import com.yurab.photoapiclient.screens.photos_list.presenter.PhotosListPresenterImpl;
@@ -26,8 +27,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class PhotosListFragment extends Fragment implements PhotosListView {
+public class PhotosListFragment extends Fragment implements PhotosListView, PhotosAdapter.PhotosAdapterInteractionListener,
+        Toolbar.OnMenuItemClickListener {
 
+    public static final String TAG = PhotosListFragment.class.getSimpleName();
     public static final int PHOTOS_PER_PAGE = 10;
 
     public static final String ORDER_PHOTOS_BY_LATEST = "latest";
@@ -60,7 +63,7 @@ public class PhotosListFragment extends Fragment implements PhotosListView {
                 int totalItemCount = mLinearLayoutManager.getItemCount();
                 int pastVisibleItems = mLinearLayoutManager.findFirstVisibleItemPosition();
 
-                if (!mIsLoading/* && mPages != 0 && mPage != mPages*/) {
+                if (!mIsLoading) {
                     if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
                         mIsLoading = true;
                         showProgress(true);
@@ -80,6 +83,8 @@ public class PhotosListFragment extends Fragment implements PhotosListView {
         View view = inflater.inflate(R.layout.fragment_photos_list, container, false);
         mUnbinder = ButterKnife.bind(this, view);
         mPresenter.onAttach(this);
+        mToolbar.inflateMenu(R.menu.photos_list_menu);
+        mToolbar.setOnMenuItemClickListener(this);
         return view;
     }
 
@@ -88,7 +93,7 @@ public class PhotosListFragment extends Fragment implements PhotosListView {
         super.onActivityCreated(savedInstanceState);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mAdapter = new PhotosAdapter(getActivity(), mPhotos);
+        mAdapter = new PhotosAdapter(getActivity(), this, mPhotos);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(mOnScrollListener);
         showProgress(true);
@@ -115,6 +120,49 @@ public class PhotosListFragment extends Fragment implements PhotosListView {
         mPhotos.addAll(photos);
         mAdapter.notifyDataSetChanged();
         showProgress(false);
+    }
+    //endregion
+
+    //region PhotosAdapterInteractionListener
+    @Override
+    public void likePhoto(String id) {
+        mPresenter.likePhoto(id);
+    }
+
+    @Override
+    public void unlikePhoto(String id) {
+        mPresenter.unlikePhoto(id);
+    }
+    //endregion
+
+
+    //region OnMenuItemClickListener
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        boolean sortChanged = false;
+        switch (item.getItemId()) {
+            case R.id.menu_sort_latest:
+                if (mOrderBy.equals(ORDER_PHOTOS_BY_LATEST)) break;
+                mOrderBy = ORDER_PHOTOS_BY_LATEST;
+                sortChanged = true;
+                break;
+            case R.id.menu_sort_oldest:
+                if (mOrderBy.equals(ORDER_PHOTOS_BY_OLDEST)) break;
+                mOrderBy = ORDER_PHOTOS_BY_OLDEST;
+                sortChanged = true;
+                break;
+            case R.id.menu_sort_popular:
+                if (mOrderBy.equals(ORDER_PHOTOS_BY_POPULAR)) break;
+                mOrderBy = ORDER_PHOTOS_BY_POPULAR;
+                sortChanged = true;
+                break;
+        }
+        if (sortChanged) {
+            mPage = 1;
+            mPhotos.clear();
+            mPresenter.getPhotos(mPage, PHOTOS_PER_PAGE, mOrderBy);
+            return true;
+        } else return false;
     }
     //endregion
 

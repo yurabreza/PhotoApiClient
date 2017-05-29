@@ -4,8 +4,8 @@ import android.util.Log;
 
 import com.yurab.photoapiclient.BuildConfig;
 import com.yurab.photoapiclient.global.Constants;
-import com.yurab.photoapiclient.model.Response.TokenResponse;
 import com.yurab.photoapiclient.model.request.GetTokenRequest;
+import com.yurab.photoapiclient.model.response.TokenResponse;
 import com.yurab.photoapiclient.network.UnsplashClient;
 import com.yurab.photoapiclient.screens.base.BaseView;
 import com.yurab.photoapiclient.screens.main.view.MainActivityView;

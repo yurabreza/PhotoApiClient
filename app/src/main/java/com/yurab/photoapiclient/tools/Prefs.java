@@ -2,6 +2,10 @@ package com.yurab.photoapiclient.tools;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+
+import com.yurab.photoapiclient.global.Constants;
+import com.yurab.photoapiclient.global.MainApp;
 
 public class Prefs {
     private static final String PARAM_USER_ACCESS_TOKEN = "PARAM_USER_ACCESS_TOKEN";
@@ -36,5 +40,11 @@ public class Prefs {
         if (context == null) return "";
         final SharedPreferences prefs = context.getSharedPreferences(Prefs.class.getSimpleName(), Context.MODE_PRIVATE);
         return prefs.getString(PARAM_USER_ACCESS_TOKEN, "");
+    }
+
+
+    @NonNull
+    public static String getHeader() {
+        return Constants.HEADER_PREFIX_BEARER + Prefs.loadAccessToken(MainApp.getAppContext());
     }
 }

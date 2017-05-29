@@ -1,21 +1,17 @@
-package com.yurab.photoapiclient.model.Response;
+package com.yurab.photoapiclient.model.response.random_photo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.yurab.photoapiclient.model.response.Links;
+import com.yurab.photoapiclient.model.response.Urls;
+import com.yurab.photoapiclient.model.response.User;
 
 import java.util.List;
 
-public class Photo {
-
+public class CoverPhoto {
     @SerializedName("id")
     @Expose
     private String id;
-    @SerializedName("created_at")
-    @Expose
-    private String createdAt;
-    @SerializedName("updated_at")
-    @Expose
-    private String updatedAt;
     @SerializedName("width")
     @Expose
     private Integer width;
@@ -34,15 +30,12 @@ public class Photo {
     @SerializedName("user")
     @Expose
     private User user;
-    @SerializedName("current_user_collections")
-    @Expose
-    private List<Object> currentUserCollections = null;
     @SerializedName("urls")
     @Expose
     private Urls urls;
     @SerializedName("categories")
     @Expose
-    private List<Object> categories = null;
+    private List<Category> categories = null;
     @SerializedName("links")
     @Expose
     private Links links;
@@ -53,22 +46,6 @@ public class Photo {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public Integer getWidth() {
@@ -119,14 +96,6 @@ public class Photo {
         this.user = user;
     }
 
-    public List<Object> getCurrentUserCollections() {
-        return currentUserCollections;
-    }
-
-    public void setCurrentUserCollections(List<Object> currentUserCollections) {
-        this.currentUserCollections = currentUserCollections;
-    }
-
     public Urls getUrls() {
         return urls;
     }
@@ -135,11 +104,11 @@ public class Photo {
         this.urls = urls;
     }
 
-    public List<Object> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Object> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
 

@@ -1,46 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="@dimen/main_padding">
-
-    <ImageView
-        android:id="@+id/iv_image"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/image_height"
-        tools:background="@color/colorAccent"/>
+    android:layout_marginBottom="@dimen/main_padding"
+    app:cardElevation="@dimen/cardview_elevation">
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/main_padding"
-        android:layout_marginTop="@dimen/main_padding"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="@dimen/main_padding">
 
-        <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/cb_like_view"
-            android:button="@null"
-            android:background="@drawable/selector_like"
-            android:layout_width="32dp"
-            android:layout_height="32dp"/>
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/image_height"
+            tools:background="@color/colorAccent"/>
 
-        <TextView
-            android:id="@+id/tv_amount_of_likes"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/main_padding"
-            android:textColor="@color/secondaryText"
-            tools:text="12678"/>
+            android:layout_marginTop="@dimen/main_padding"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_author_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/main_padding"
-            android:textColor="@color/primaryText"
-            tools:text=" Antonio Biaggi"/>
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/cb_like_view"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/selector_like"
+                android:button="@null"/>
+
+            <TextView
+                android:id="@+id/tv_amount_of_likes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/main_padding"
+                android:textColor="@color/secondaryText"
+                tools:text="12678"/>
+
+            <TextView
+                android:id="@+id/tv_author_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/main_padding"
+                android:textColor="@color/primaryText"
+                tools:text=" Antonio Biaggi"/>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</android.support.v7.widget.CardView>

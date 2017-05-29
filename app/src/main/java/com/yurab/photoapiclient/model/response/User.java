@@ -1,4 +1,4 @@
-package com.yurab.photoapiclient.model.Response;
+package com.yurab.photoapiclient.model.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -159,4 +159,23 @@ public class User {
         this.links = links;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", portfolioUrl=" + portfolioUrl +
+                ", bio='" + bio + '\'' +
+                ", location='" + location + '\'' +
+                ", totalLikes=" + totalLikes +
+                ", totalPhotos=" + totalPhotos +
+                ", totalCollections=" + totalCollections +
+                ", profileImage=" + profileImage +
+                ", links=" + links +
+                '}';
+    }
 }
