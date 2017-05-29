@@ -7,5 +7,6 @@
     <dimen name="cardview_elevation">8dp</dimen>
     <dimen name="user_icon_size">48dp</dimen>
     <dimen name="bottom_bar_height">56dp</dimen>
+    <dimen name="small_padding">8dp</dimen>
 
 </resources>

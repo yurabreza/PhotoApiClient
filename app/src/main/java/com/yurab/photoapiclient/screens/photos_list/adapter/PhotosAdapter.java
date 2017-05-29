@@ -3,6 +3,7 @@ package com.yurab.photoapiclient.screens.photos_list.adapter;
 import android.content.Context;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewHolder> {
@@ -68,20 +70,31 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewH
         }
 
         void bind(Photo photo) {
-            Log.d(TAG, "bind: "+photo.toString());
+            Log.d(TAG, "bind: " + photo.toString());
             Glide.with(mContext).load(photo.getUrls().getRegular())
+                    .placeholder(R.drawable.ic_placeholder)
                     .bitmapTransform(new CenterCrop(mContext),
                             new RoundedCornersTransformation(mContext, mCornerRadius, 0))
+                    .dontAnimate()
                     .into(mMainImageView);
             mLikeCheckBox.setChecked(photo.getLikedByUser());
             mAmountOfLikesTextView.setText(String.valueOf(photo.getLikes()));
             mAuthorNameTextView.setText(photo.getUser().getName());
         }
 
+        @OnClick(R.id.iv_image)
+        void onImageClick(View v) {
+            Utils.disableViewAfterClick(v);
+            mListener.selectPhoto(mItems.get(getAdapterPosition()).getId());
+        }
+
         @OnCheckedChanged(R.id.cb_like_view)
         void onLikeClick(boolean checked) {
             Utils.disableViewAfterClick(mLikeCheckBox);
-            int likes = Integer.valueOf(mAmountOfLikesTextView.getText().toString());
+            int likes = 0;
+            if (!TextUtils.isEmpty(mAmountOfLikesTextView.getText().toString())){
+                likes = Integer.valueOf(mAmountOfLikesTextView.getText().toString());
+            }
             if (checked) {
                 mListener.likePhoto(mItems.get(getAdapterPosition()).getId());
                 ++likes;
@@ -97,6 +110,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewH
         void likePhoto(String id);
 
         void unlikePhoto(String id);
+
+        void selectPhoto(String id);
 
     }
 }

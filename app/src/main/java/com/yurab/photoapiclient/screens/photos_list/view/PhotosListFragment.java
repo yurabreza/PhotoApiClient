@@ -1,5 +1,7 @@
 package com.yurab.photoapiclient.screens.photos_list.view;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,13 +24,14 @@ import com.yurab.photoapiclient.screens.photos_list.presenter.PhotosListPresente
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class PhotosListFragment extends Fragment implements PhotosListView, PhotosAdapter.PhotosAdapterInteractionListener,
-        Toolbar.OnMenuItemClickListener {
+public class PhotosListFragment extends Fragment implements PhotosListView,
+        PhotosAdapter.PhotosAdapterInteractionListener{
 
     public static final String TAG = PhotosListFragment.class.getSimpleName();
     public static final int PHOTOS_PER_PAGE = 10;
@@ -36,10 +39,13 @@ public class PhotosListFragment extends Fragment implements PhotosListView, Phot
     public static final String ORDER_PHOTOS_BY_LATEST = "latest";
     public static final String ORDER_PHOTOS_BY_OLDEST = "oldest";
     public static final String ORDER_PHOTOS_BY_POPULAR = "popular";
+    public static final String EMPTY_ID = "";
 
     @BindView(R.id.progress_bar) ProgressBar mProgressBar;
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.toolbar) Toolbar mToolbar;
+
+    @BindDrawable(R.drawable.ic_menu) Drawable mMenuIcon;
 
     private PhotosListPresenter mPresenter = new PhotosListPresenterImpl();
     private Unbinder mUnbinder;
@@ -47,6 +53,10 @@ public class PhotosListFragment extends Fragment implements PhotosListView, Phot
     private ArrayList<Photo> mPhotos = new ArrayList<>();
     private int mPage = 1;
     private String mOrderBy = ORDER_PHOTOS_BY_LATEST;
+    private LinearLayoutManager mLinearLayoutManager;
+    private boolean mIsLoading;
+    private PhotosListInteractionListener mListener;
+
 
     private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
 
@@ -74,8 +84,15 @@ public class PhotosListFragment extends Fragment implements PhotosListView, Phot
         }
     };
 
-    private LinearLayoutManager mLinearLayoutManager;
-    private boolean mIsLoading;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof PhotosListInteractionListener) {
+            mListener = (PhotosListInteractionListener) context;
+        } else {
+            throw new RuntimeException("context must be instanceof " + PhotosListInteractionListener.class.getSimpleName());
+        }
+    }
 
     @Nullable
     @Override
@@ -84,7 +101,7 @@ public class PhotosListFragment extends Fragment implements PhotosListView, Phot
         mUnbinder = ButterKnife.bind(this, view);
         mPresenter.onAttach(this);
         mToolbar.inflateMenu(R.menu.photos_list_menu);
-        mToolbar.setOnMenuItemClickListener(this);
+        mToolbar.setOnMenuItemClickListener(this::onMenuItemClick);
         return view;
     }
 
@@ -133,11 +150,15 @@ public class PhotosListFragment extends Fragment implements PhotosListView, Phot
     public void unlikePhoto(String id) {
         mPresenter.unlikePhoto(id);
     }
+
+    @Override
+    public void selectPhoto(String id) {
+        mListener.startPhotoFragment(id);
+    }
     //endregion
 
 
     //region OnMenuItemClickListener
-    @Override
     public boolean onMenuItemClick(MenuItem item) {
         boolean sortChanged = false;
         switch (item.getItemId()) {
@@ -156,6 +177,10 @@ public class PhotosListFragment extends Fragment implements PhotosListView, Phot
                 mOrderBy = ORDER_PHOTOS_BY_POPULAR;
                 sortChanged = true;
                 break;
+            case R.id.menu_random:
+                startRandomPhotoFrag();
+                sortChanged = true;
+                break;
         }
         if (sortChanged) {
             mPage = 1;
@@ -164,6 +189,10 @@ public class PhotosListFragment extends Fragment implements PhotosListView, Phot
             return true;
         } else return false;
     }
+
+    private void startRandomPhotoFrag() {
+        mListener.startPhotoFragment(EMPTY_ID);
+    }
     //endregion
 
     @Override
@@ -171,5 +200,15 @@ public class PhotosListFragment extends Fragment implements PhotosListView, Phot
         mUnbinder.unbind();
         mPresenter.onDetach();
         super.onDestroyView();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface PhotosListInteractionListener {
+        void startPhotoFragment(String id);
     }
 }

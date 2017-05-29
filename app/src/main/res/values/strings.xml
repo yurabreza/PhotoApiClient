@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">PhotoApiClient</string>
+    <string name="txt_auth_dialog_title">Please authorize into Unsplash </string>
+    <string name="txt_auth_dialog_subtitle">This is required for most App functionality</string>
     <string name="txt_sort_by_popularity">Sort by popularity</string>
     <string name="txt_sort_by_oldest">Sort by oldest</string>
     <string name="txt_sort_by_latest">Sort by latest</string>
     <string name="text_nav_photos_list">Photos list</string>
     <string name="text_nav_random_photo">Random photos</string>
+    <string name="sort_menu">Sort menu</string>
+    <string name="action_next">Next</string>
+    <string name="action_ok">Ok</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.yurab.photoapiclient.network;
+package com.yurab.photoapiclient.model.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

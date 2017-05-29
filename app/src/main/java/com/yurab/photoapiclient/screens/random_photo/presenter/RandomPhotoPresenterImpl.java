@@ -1,20 +1,20 @@
 package com.yurab.photoapiclient.screens.random_photo.presenter;
 
 import com.yurab.photoapiclient.global.Constants;
+import com.yurab.photoapiclient.model.network.UnsplashClient;
 import com.yurab.photoapiclient.model.response.random_photo.RandomPhotoResponse;
-import com.yurab.photoapiclient.network.UnsplashClient;
 import com.yurab.photoapiclient.screens.base.BaseView;
 import com.yurab.photoapiclient.screens.random_photo.view.RandomPhotoView;
 import com.yurab.photoapiclient.tools.Prefs;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class RandomPhotoPresenterImpl implements RandomPhotoPresenter {
 
     private RandomPhotoView mView;
-    private Observable<RandomPhotoResponse> mRandomPhotoObservable;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     @Override
     public void onAttach(BaseView view) {
@@ -27,12 +27,20 @@ public class RandomPhotoPresenterImpl implements RandomPhotoPresenter {
 
     @Override
     public void getRandomPhoto() {
-        mRandomPhotoObservable = UnsplashClient.getApiInterface().getRandomPhoto(Prefs.getHeader());
-
-        mRandomPhotoObservable
+        mCompositeDisposable.add(UnsplashClient.getApiInterface()
+                .getRandomPhoto(Prefs.getHeader())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onPhotoLoadSuccess, this::handleError);
+                .subscribe(this::onPhotoLoadSuccess, this::handleError));
+    }
+
+    @Override
+    public void getPhoto(String id) {
+        mCompositeDisposable.add(UnsplashClient.getApiInterface()
+                .getPhoto(Prefs.getHeader(), id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onPhotoLoadSuccess, this::handleError));
     }
 
     private void onPhotoLoadSuccess(RandomPhotoResponse randomPhotoResponse) {
@@ -43,12 +51,12 @@ public class RandomPhotoPresenterImpl implements RandomPhotoPresenter {
     @Override
     public void handleError(Throwable throwable) {
         throwable.printStackTrace();
-        mView.onError(Constants.SERVER_ERROR_MESSAGE);
+        if (mView != null) mView.onError(Constants.SERVER_ERROR_MESSAGE);
     }
 
     @Override
     public void onDetach() {
-        mRandomPhotoObservable.unsubscribeOn(Schedulers.io());
+        mCompositeDisposable.dispose();
         mView = null;
     }
 }

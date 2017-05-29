@@ -5,4 +5,6 @@ import com.yurab.photoapiclient.screens.base.BasePresenter;
 
 public interface RandomPhotoPresenter extends BasePresenter {
     void getRandomPhoto();
+
+    void getPhoto(String id);
 }

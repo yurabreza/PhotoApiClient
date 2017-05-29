@@ -1,4 +1,4 @@
-package com.yurab.photoapiclient.network;
+package com.yurab.photoapiclient.model.network;
 
 import com.yurab.photoapiclient.model.request.GetTokenRequest;
 import com.yurab.photoapiclient.model.response.LikeResponse;
@@ -32,8 +32,13 @@ public interface ApiInterface {
                                       @Query("page") String page,
                                       @Query("per_page") String perPage,
                                       @Query("order_by") String orderBy);
+
     @GET("/photos/random")
     Observable<RandomPhotoResponse> getRandomPhoto(@Header("Authorization") String header);
+
+    @GET("/photos/{id}")
+    Observable<RandomPhotoResponse> getPhoto(@Header("Authorization") String header,
+                                             @Path("id") String id);
 
     @POST("/photos/{id}/like")
     Observable<LikeResponse> likePhoto(@Header("Authorization") String header,
@@ -41,5 +46,5 @@ public interface ApiInterface {
 
     @DELETE("/photos/{id}/like")
     Observable<LikeResponse> unlikePhoto(@Header("Authorization") String header,
-                                       @Path("id") String photoId);
+                                         @Path("id") String photoId);
 }
