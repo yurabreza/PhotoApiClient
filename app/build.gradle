@@ -13,6 +13,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "BASE_URL", '"https://api.unsplash.com"'
+        buildConfigField "String", "URL_GET_OAUTH_TOKEN", '"https://unsplash.com/oauth/token"'
         buildConfigField "String", "UNSPLASH_AUTH_URL", '"https://unsplash.com/oauth/authorize?client_id=' +
                 '36eb73a77feaf116dbcea22392f39418baf351040e58cce463fda96d894b41ce&redirect_uri=' +
                 'photo.api.client%3A%2F%2Fredirected&response_type=code&scope=public+read_user+read_photos+write_likes"'

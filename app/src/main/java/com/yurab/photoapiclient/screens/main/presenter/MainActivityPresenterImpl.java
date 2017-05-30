@@ -17,7 +17,6 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivityPresenterImpl implements MainActivityPresenter {
 
     public static final String GRANT_TYPE = "authorization_code";
-    public static final String URL_GET_OAUTH_TOKEN = "https://unsplash.com/oauth/token";
 
     private MainActivityView mView;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
@@ -34,7 +33,7 @@ public class MainActivityPresenterImpl implements MainActivityPresenter {
     @Override
     public void getUserToken(String code) {
         mCompositeDisposable.add(UnsplashClient.getApiInterface()
-                .getToken(URL_GET_OAUTH_TOKEN,
+                .getToken(BuildConfig.URL_GET_OAUTH_TOKEN,
                         new GetTokenRequest(BuildConfig.UNSPLASH_APPLICATION_ID,
                                 BuildConfig.UNSPLASH_SECRET,
                                 BuildConfig.UNSPLASH_REDIRECT_URI,
